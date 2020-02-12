@@ -1,8 +1,9 @@
 <?php
 
-require('config/connect.php');
+require('config/db.php');
 
 
+$dbh = Db::getInstance()->_pdo;
 
 
 ?>

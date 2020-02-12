@@ -1,6 +1,10 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
-require('config/connect.php')
+// require('config/connect.php')
+
+require('config/db.php');
+
+
 
 ?>
 <!DOCTYPE html>
@@ -31,15 +35,20 @@ require('config/connect.php')
                 //sécurisé la faille injection sql
                 // $sth = $dbh->prepare("SELECT * FROM `article` INNER JOIN liste_article on liste_article.id_article = article.id_article WHERE liste_article.id_liste_course = ?");
 
-                $sth = $dbh->prepare("SELECT * FROM `article` INNER JOIN liste_article on liste_article.id_article = article.id_article WHERE liste_article.id_liste_course = :idlistart");
-                $sth->bindParam(':idlistart', $_GET['id'], PDO::PARAM_INT);
-                $sth->execute();
+                // $sth = $dbh->prepare("SELECT * FROM `article` INNER JOIN liste_article on liste_article.id_article = article.id_article WHERE liste_article.id_liste_course = :idlistart");
+                // $sth->bindParam(':idlistart', $_GET['id'], PDO::PARAM_INT);
+                // $sth->execute();
 
                 //$sql = "SELECT * FROM `article` INNER JOIN liste_article on liste_article.id_article = article.id_article WHERE liste_article.id_liste_course = {$_GET['id']}";
                 //$stmt = $dbh->query($sql);
 
-                $result = $sth->fetchAll(PDO::FETCH_ASSOC);
-                foreach ($result as $key => $value) {
+                $array = [':idlistart'=> $_GET['id']];
+
+                $dbh->query("SELECT * FROM `article` INNER JOIN liste_article on liste_article.id_article = article.id_article WHERE liste_article.id_liste_course = :idlistart", $array);
+                $dbr =$dbh->getResult();
+                var_dump($dbr);
+                // $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+                foreach ($dbr as $key => $value) {
                     echo '<tr>';
                     echo '<th scope="row">' . $value['id_liste_article'] . '</th>';
                     echo '<td>' . utf8_encode($value['nom']) . '</td>';

@@ -1,34 +1,25 @@
 <?php
-require('config/connect.php');
+require('config/db.php');
 
 if (isset($_POST['last_name'])) {
     //$zip = (int) $_POST['zip_code'];
-    $sth = $dbh->prepare("INSERT INTO `users`(`nom`, `prenom`, `adresse`, `code_postal`, `ville`, `email`, `password`) VALUES (:lastname, :firstname, :address, :zipcode, :city, :email, :pwd )");
+    
     $lastname = htmlspecialchars($_POST['last_name']);
     $firstname = htmlspecialchars($_POST['first_name']);
     $address = htmlspecialchars($_POST['address']);
     $zip = htmlspecialchars($_POST['zip_code']);
     $city = htmlspecialchars($_POST['city']);
     $email = htmlspecialchars($_POST['email']);
-    $pwd = htmlspecialchars($_POST['password']);
-    $sth->bindParam(':lastname', $lastname);
-    $sth->bindParam(':firstname', $firstname);
-    $sth->bindParam(':address', $address);
-    $sth->bindParam(':zipcode', $zip);
-    $sth->bindParam(':city', $city);
-    $sth->bindParam(':email', $email);
-    $sth->bindParam(':pwd', $pwd);
-    if ($sth->execute()) {
-        header('Location: index.php');
-    }
+    $pwd = $_POST['password'];
+    $dbh->insert(`users`,[`nom` => $lastname, `prenom`=>$firstname , `adresse`=>$address , `code_postal`=>$zip , `ville`=> $city, `email`=> $email, `password`=>$pwd]);
 }
-try{
-    $dbh->beginTransaction();
-    $dbh->commit();
-    $dbh->rollback();
-}catch(Exception $e){
-    echo $e->getMessage();
-}
+// try{
+//     $dbh->beginTransaction();
+//     $dbh->commit();
+//     $dbh->rollback();
+// }catch(Exception $e){
+//     echo $e->getMessage();
+// }
 ?>
 
 <!DOCTYPE html>
