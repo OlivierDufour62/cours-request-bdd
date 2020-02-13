@@ -1,0 +1,5 @@
+AuthName "Page d'administration protégée"
+AuthType Basic
+AuthUserFile "C:\wamp64\www\projet_liste\.htpasswd"
+Require valid-user
+ErrorDocument 404 /page-non-trouvee.html
