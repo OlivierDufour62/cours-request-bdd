@@ -11,8 +11,8 @@ if (isset($_POST['last_name'])) {
     $city = htmlspecialchars($_POST['city']);
     $email = htmlspecialchars($_POST['email']);
     $pwd = $_POST['password'];
-    $dbh->insert(`users`,[`nom` => $lastname, `prenom`=>$firstname , `adresse`=>$address , `code_postal`=>$zip , `ville`=> $city, `email`=> $email, `password`=>$pwd]);
-}
+    $dbh->insert('users',['nom' => $lastname, 'prenom'=>$firstname , 'adresse'=>$address , 'code_postal'=>$zip , 'ville'=> $city, 'email'=> $email, 'password'=>$pwd]);
+} var_dump($_POST);
 // try{
 //     $dbh->beginTransaction();
 //     $dbh->commit();

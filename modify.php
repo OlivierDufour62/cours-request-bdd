@@ -1,9 +1,10 @@
 <?php
-require('config/connect.php');
+require('config/db.php');
+
 
 $sql = "SELECT * FROM `users` WHERE id_users = {$_GET['id']}";
 $stmt = $dbh->query($sql);
-$result = $stmt->fetch(PDO::FETCH_ASSOC);
+$result = $dbh->getResult();
 
 
 // foreach($result as $key => $value){
@@ -14,7 +15,8 @@ $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (isset($_POST['last_name'])) {
     //$zip = (int) $_POST['zip_code'];
-    $sth = $dbh->prepare("UPDATE `users` SET `nom`=:lastname,`prenom`=:firstname,`adresse`=:address,`code_postal`=:zipcode,`ville`=:city,`email`=:email,`password`=:pwd WHERE id_users={$_GET['id']}");
+    // $sth = $dbh->prepare("UPDATE `users` SET `nom`=:lastname,`prenom`=:firstname,`adresse`=:address,`code_postal`=:zipcode,`ville`=:city,`email`=:email,`password`=:pwd WHERE id_users={$_GET['id']}");
+    $id = $_GET['id'];
     $lastname = htmlspecialchars($_POST['last_name']);
     $firstname = htmlspecialchars($_POST['first_name']);
     $address = htmlspecialchars($_POST['address']);
@@ -22,16 +24,11 @@ if (isset($_POST['last_name'])) {
     $city = htmlspecialchars($_POST['city']);
     $email = htmlspecialchars($_POST['email']);
     $pwd = htmlspecialchars($_POST['password']);
-    $sth->bindParam(':lastname', $lastname);
-    $sth->bindParam(':firstname', $firstname);
-    $sth->bindParam(':address', $address);
-    $sth->bindParam(':zipcode', $zip);
-    $sth->bindParam(':city', $city);
-    $sth->bindParam(':email', $email);
-    $sth->bindParam(':pwd', $pwd);
-    if ($sth->execute()) {
-        header('Location: index.php');
-    }
+    $dbh->update('users',['nom' => $lastname, 'prenom'=>$firstname , 'adresse'=>$address , 'code_postal'=>$zip , 'ville'=>$city, 'email'=>$email, 'password'=>$pwd], ['id_users'=>$id]);
+    var_dump($dbh);
+    // if ($sth->execute()) {
+    //     header('Location: index.php');
+    // }
 }
 
 ?>
@@ -53,31 +50,31 @@ if (isset($_POST['last_name'])) {
     <form method="POST" class="col-6 mx-auto">
         <div class="form-group">
             <label for="first_name">first_name</label>
-            <input type="text" class="form-control" name="first_name" id="first_name" placeholder="Enter first name" value="<?= $result['prenom'] ?>">
+            <input type="text" class="form-control" name="first_name" id="first_name" placeholder="Enter first name" value="<?= $result[0]['prenom'] ?>">
         </div>
         <div class="form-group">
             <label for="last_name">last_name</label>
-            <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Enter last name" value="<?= $result['nom'] ?>">
+            <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Enter last name" value="<?= $result[0]['nom'] ?>">
         </div>
         <div class="form-group">
             <label for="adresse">Adress</label>
-            <input type="text" class="form-control" name="address" id="adresse" placeholder="Enter Adress" value="<?= $result['adresse'] ?>">
+            <input type="text" class="form-control" name="address" id="adresse" placeholder="Enter Adress" value="<?= $result[0]['adresse'] ?>">
         </div>
         <div class="form-group">
             <label for="code_postal">zipcode</label>
-            <input type="number" class="form-control" name="zip_code" id="postal_code" placeholder="Enter Postal code" value="<?= $result['code_postal'] ?>">
+            <input type="number" class="form-control" name="zip_code" id="postal_code" placeholder="Enter Postal code" value="<?= $result[0]['code_postal'] ?>">
         </div>
         <div class="form-group">
             <label for="ville">city</label>
-            <input type="text" class="form-control" name="city" id="ville" placeholder="Enter city" value="<?= $result['ville'] ?>">
+            <input type="text" class="form-control" name="city" id="ville" placeholder="Enter city" value="<?= $result[0]['ville'] ?>">
         </div>
         <div class="form-group">
             <label for="inputemail">Email</label>
-            <input type="email" class="form-control" name="email" id="inputemail" placeholder="Enter email" value="<?= $result['email'] ?>">
+            <input type="email" class="form-control" name="email" id="inputemail" placeholder="Enter email" value="<?= $result[0]['email'] ?>">
         </div>
         <div class="form-group">
             <label for="inputpassword">Password</label>
-            <input type="password" class="form-control" name="password" id="inputpassword" placeholder="Password" value="<?= $result['password'] ?>">
+            <input type="password" class="form-control" name="password" id="inputpassword" placeholder="Password" value="<?= $result[0]['password'] ?>">
         </div>
         <div class="form-check">
             <input type="checkbox" class="form-check-input" id="exampleCheck1">

@@ -17,6 +17,7 @@ class Db
     {
         try {
             $this->_pdo = new PDO('mysql:dbname=' . DB_name  . ';host=' . DB_root, DB_user, DB_password);
+            $this->_pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             echo 'Connexion échouée : ' . $e->getMessage();
         }
@@ -31,7 +32,7 @@ class Db
         return self::$_instance;
     }
 
-    public function query($request, array $array)
+    public function query($request, array $array = [])
     {
         $this->_stmt = $this->_pdo->prepare($request);
         if ($this->_stmt->execute($array)) {
@@ -67,6 +68,41 @@ class Db
         }
         $insert = "INSERT INTO " . $tableName . " (" . implode(',', array_keys($array)) . ") " . "values(" . implode(',', array_keys($insertToQuery)) . ")";
         $this->query($insert, $insertToQuery);
+    }
+
+
+    public function update($table, $tab, $where)
+    {
+        $stringWhere = '';
+        $stringSet = '';
+
+        $queryValue = [];
+        foreach ($tab as $key => $value) {
+            $stringSet .= "`$key` = :" . $key . ', '; 
+            $queryValue[':' . $key] = $value;  
+        }
+
+        foreach ($where as $key => $value) {
+            $stringWhere .= "`$key` = :" . $key . ' and ';//concaténation de la chaine de clé
+            $queryValue[':' . $key] = $value; //concaténation de la chaine clé => valeur
+        }
+
+        $stringSet = rtrim($stringSet, ', '); //suppression des espaces
+        $stringWhere = rtrim($stringWhere, ' and '); //suppression des espaces
+        $sql = "UPDATE $table SET $stringSet  WHERE $stringWhere "; //requete
+        $this->query($sql, $queryValue); //envoie requete a query
+    }
+
+    public function delete($table, $where)
+    {
+        $stringWhere = '';
+        foreach ($where as $key => $value) {
+            $stringWhere .= "`$key` = :" . $key . ' and ';//concaténation de la chaine de clé
+            $queryValue[':' . $key] = $value; //concaténation de la chaine clé => valeur
+        }
+        $stringWhere = rtrim($stringWhere, ' and '); //suppression des espace
+        $sql = "DELETE FROM " . $table . " WHERE " . $stringWhere;
+        $this->query($sql, $queryValue);
     }
 }
 
