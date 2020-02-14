@@ -12,7 +12,17 @@ if (isset($_POST['last_name'])) {
     $email = htmlspecialchars($_POST['email']);
     $pwd = $_POST['password'];
     $dbh->insert('users',['nom' => $lastname, 'prenom'=>$firstname , 'adresse'=>$address , 'code_postal'=>$zip , 'ville'=> $city, 'email'=> $email, 'password'=>$pwd]);
-} var_dump($_POST);
+    $std = new stdClass;
+    $std->last_name = $lastname;
+    $std->first_name = $firstname;
+    $std->address = $address;
+    $std->zip = $zip;
+    $std->city = $city;
+    $std->email = $email;
+    $std->pwd = $pwd;
+    
+    var_dump($std);
+} 
 // try{
 //     $dbh->beginTransaction();
 //     $dbh->commit();
@@ -20,6 +30,11 @@ if (isset($_POST['last_name'])) {
 // }catch(Exception $e){
 //     echo $e->getMessage();
 // }
+
+
+
+
+
 ?>
 
 <!DOCTYPE html>
