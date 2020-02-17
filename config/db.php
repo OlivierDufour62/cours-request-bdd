@@ -68,6 +68,7 @@ class Db
         }
         $insert = "INSERT INTO " . $tableName . " (" . implode(',', array_keys($array)) . ") " . "values(" . implode(',', array_keys($insertToQuery)) . ")";
         $this->query($insert, $insertToQuery);
+        return $this-> getlastInsertId();
     }
 
 

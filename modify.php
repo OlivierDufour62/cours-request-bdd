@@ -13,23 +13,7 @@ $result = $dbh->getResult();
 
 // $upd=  "UPDATE `users` SET `nom`=:lastname,`prenom`=:fistname,`adresse`=:address,`code_postal`=:zipcode,`ville`=:city,`email`=:email,`password`=:pwd WHERE id_users={$_GET['id']}";
 
-if (isset($_POST['last_name'])) {
-    //$zip = (int) $_POST['zip_code'];
-    // $sth = $dbh->prepare("UPDATE `users` SET `nom`=:lastname,`prenom`=:firstname,`adresse`=:address,`code_postal`=:zipcode,`ville`=:city,`email`=:email,`password`=:pwd WHERE id_users={$_GET['id']}");
-    $id = $_GET['id'];
-    $lastname = htmlspecialchars($_POST['last_name']);
-    $firstname = htmlspecialchars($_POST['first_name']);
-    $address = htmlspecialchars($_POST['address']);
-    $zip = htmlspecialchars($_POST['zip_code']);
-    $city = htmlspecialchars($_POST['city']);
-    $email = htmlspecialchars($_POST['email']);
-    $pwd = htmlspecialchars($_POST['password']);
-    $dbh->update('users',['nom' => $lastname, 'prenom'=>$firstname , 'adresse'=>$address , 'code_postal'=>$zip , 'ville'=>$city, 'email'=>$email, 'password'=>$pwd], ['id_users'=>$id]);
-    var_dump($dbh);
-    // if ($sth->execute()) {
-    //     header('Location: index.php');
-    // }
-}
+
 
 ?>
 <!DOCTYPE html>
@@ -41,13 +25,12 @@ if (isset($_POST['last_name'])) {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
     <title>Title</title>
 </head>
 
 <body>
 
-    <form method="POST" class="col-6 mx-auto">
+    <form class="col-6 mx-auto moduser">
         <div class="form-group">
             <label for="first_name">first_name</label>
             <input type="text" class="form-control" name="first_name" id="first_name" placeholder="Enter first name" value="<?= $result[0]['prenom'] ?>">
@@ -75,6 +58,7 @@ if (isset($_POST['last_name'])) {
         <div class="form-group">
             <label for="inputpassword">Password</label>
             <input type="password" class="form-control" name="password" id="inputpassword" placeholder="Password" value="<?= $result[0]['password'] ?>">
+            <input type="hidden" class="form-control" name="id" id="id" placeholder="id" value="<?= $_GET['id'] ?>">
         </div>
         <div class="form-check">
             <input type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -83,9 +67,10 @@ if (isset($_POST['last_name'])) {
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="libs/js/test_ajax.js"></script>
 </body>
 
 </html>
